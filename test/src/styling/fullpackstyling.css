@@ -1,0 +1,26 @@
+/* accueil total */
+.hover-blue:hover {
+    -fx-background-color: #6699f0;
+    -fx-cursor: hand ;
+}
+
+.hover-blue:hover text {
+    -fx-fill: white !important;
+}
+
+.hover-blue-right:hover {
+    -fx-border-color: black ;
+    -fx-border-width: 0px 4px 0px 0px;
+}
+
+.cursor-hand{
+    -fx-cursor: hand;
+}
+
+.hover-dark-blue:hover{
+    -fx-background-color: #6699f0 !important;
+}
+
+.hover-link:hover{
+    -fx-background-color: transparent !important;
+}

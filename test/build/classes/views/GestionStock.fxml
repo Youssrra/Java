@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane fx:id="borderpane" prefHeight="600.0" prefWidth="600.0" stylesheets="@../styling/affichageStyle.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.GestionStockController">
+    <center>
+      <VBox maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="815.0" styleClass="content-page" stylesheets="@../styling/ajouterStyle.css"><children>
+            <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="596.0" prefWidth="816.0" styleClass="content-gproduit">
+               <children>
+                  <HBox prefHeight="42.0" prefWidth="985.0">
+                     <children>
+                        <HBox prefHeight="42.0" prefWidth="971.0">
+                           <children>
+                              <JFXButton buttonType="RAISED" layoutX="133.0" layoutY="10.0" minHeight="-Infinity" minWidth="-Infinity" onAction="#ajouter" prefHeight="45.0" prefWidth="48.0" style="-fx-background-color: transparent;" textFill="#ffffff00">
+                                 <graphic>
+                                    <ImageView accessibleRole="BUTTON" fitHeight="33.0" fitWidth="60.0" onMouseClicked="#modifier" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/add.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <HBox.margin>
+                                    <Insets left="20.0" />
+                                 </HBox.margin>
+                              </JFXButton>
+                              <JFXButton buttonType="RAISED" minHeight="-Infinity" minWidth="-Infinity" onAction="#supprimer" prefHeight="45.0" prefWidth="48.0" style="-fx-background-color: transparent;" textFill="#ffffff00">
+                                 <graphic>
+                                    <ImageView accessibleRole="BUTTON" fitHeight="33.0" fitWidth="60.0" onMouseClicked="#modifier" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/eraser%20(1).png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <HBox.margin>
+                                    <Insets left="20.0" />
+                                 </HBox.margin>
+                              </JFXButton>
+                              <JFXButton buttonType="RAISED" minHeight="-Infinity" minWidth="-Infinity" onAction="#modifier" prefHeight="45.0" prefWidth="48.0" style="-fx-background-color: transparent;" textFill="#ffffff00">
+                                 <graphic>
+                                    <ImageView accessibleRole="BUTTON" fitHeight="33.0" fitWidth="60.0" onMouseClicked="#modifier" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/edit.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <HBox.margin>
+                                    <Insets left="20.0" />
+                                 </HBox.margin>
+                              </JFXButton>
+                              <JFXButton buttonType="RAISED" minHeight="-Infinity" minWidth="-Infinity" onAction="#detail" prefHeight="45.0" prefWidth="48.0" style="-fx-background-color: transparent;" textFill="#ffffff00">
+                                 <graphic>
+                                    <ImageView accessibleRole="BUTTON" fitHeight="33.0" fitWidth="60.0" onMouseClicked="#modifier" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/eye%20(1).png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <HBox.margin>
+                                    <Insets left="20.0" />
+                                 </HBox.margin>
+                              </JFXButton>
+                              <ImageView fitHeight="42.0" fitWidth="46.0" onMouseClicked="#reafficher_categorie" pickOnBounds="true" preserveRatio="true">
+                                 <HBox.margin>
+                                    <Insets left="450.0" />
+                                 </HBox.margin>
+                                 <image>
+                                    <Image url="@../images/reload.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </HBox>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="58.0" prefWidth="985.0" styleClass="hbox-search">
+                     <children>
+                        <JFXTextField fx:id="filterField" focusColor="#d1d1d1" prefHeight="41.0" prefWidth="283.0" unFocusColor="#d1d1d1">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </JFXTextField>
+                        <Button mnemonicParsing="false" prefHeight="31.0" prefWidth="39.0" style="-fx-background-color: transparent; -fx-border-color: #d1d1d1; -fx-border-width: 0 0 1 0;" textFill="#979797">
+                           <graphic>
+                             
+                           </graphic>
+                           
+                        </Button>
+                     </children>
+                  </HBox>
+                  <TableView fx:id="liste_produit" prefHeight="400.0" prefWidth="821.0">
+                     <columns>
+                        <TableColumn fx:id="id_produit" prefWidth="56.0" text="ID" visible="true" />
+                        <TableColumn fx:id="reference_produit" prefWidth="93.0" text="Réference" />
+                        <TableColumn fx:id="nom_produit" maxWidth="629.0" prefWidth="91.0" style="-fx-text-alignment: center;" text="Nom" />
+                        <TableColumn fx:id="prix_produit" prefWidth="84.0" text="Prix" />
+                        <TableColumn fx:id="quantiter_produit" prefWidth="75.0" text="Quantite" />
+                        <TableColumn fx:id="categorie_produit" prefWidth="114.0" text="Categorie" />
+                        <TableColumn fx:id="marque_produit" maxWidth="500.0" prefWidth="121.0" text="Marque" />
+                        <TableColumn fx:id="image_produit" editable="false" prefWidth="96.0" sortable="false" text="Categorie" visible="false" />
+                        <TableColumn fx:id="description_produit" prefWidth="150.0" text="Description" />
+                        
+                     </columns>
+                  </TableView>
+                  <HBox alignment="CENTER_RIGHT" prefHeight="33.0" prefWidth="786.0">
+                     <children>
+                        <JFXButton buttonType="RAISED" minHeight="-Infinity" minWidth="-Infinity" onAction="#exporterPDF" prefHeight="48.0" prefWidth="51.0" style="-fx-background-color: transparent;" textFill="#ffffff00">
+                           <graphic>
+                              <ImageView accessibleRole="BUTTON" fitHeight="48.0" fitWidth="106.0" onMouseClicked="#modifier" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/icons8-pdf-64.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </JFXButton>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </VBox>
+   </center>
+</BorderPane>
