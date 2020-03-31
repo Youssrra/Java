@@ -48,6 +48,18 @@ public class Produit {
         this.image = image;
     }
 
+    public Produit( String reference,String nom,String image,double prix, int quantite,int id_categorie,String marque, String description, int partenaire) {
+        this.nom = nom;
+        this.description = description;
+        this.marque = marque;
+        this.id_categorie = id_categorie;
+        this.partenaire = partenaire;
+        this.prix = prix;
+        this.quantite = quantite;
+        this.reference = reference;
+        this.image = image;
+    }
+
     public Produit() {
     }
 

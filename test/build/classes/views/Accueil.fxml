@@ -3,6 +3,7 @@
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -32,13 +33,13 @@
                         </Label>
                      </children>
                   </HBox>
-                  <HBox>
+                  <HBox fx:id="btn_gest_admin" onMouseClicked="#AdminLoad">
                      <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
                      <children>
                         <FontAwesomeIcon fill="WHITE" iconName="USERS" size="1.3em" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: white; -fx-font-weight: bold;" text="Gestion des utilisateurs">
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: white; -fx-font-weight: bold;" text="Gestion des administrateur">
                            <HBox.margin>
                               <Insets left="10.0" />
                            </HBox.margin>
@@ -47,6 +48,40 @@
                      <VBox.margin>
                         <Insets top="10.0" />
                      </VBox.margin>
+                     <styleClass>
+                        <String fx:value="hover-blue" />
+                        <String fx:value="hover-blue-right" />
+                     </styleClass>
+                  </HBox>
+                  <HBox fx:id="btn_gest_part" layoutX="10.0" layoutY="82.0" onMouseClicked="#PartenaireLoad">
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                     <children>
+                        <FontAwesomeIcon fill="WHITE" iconName="USERS" size="1.3em" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: white; -fx-font-weight: bold;" text="Gestion des partenaire">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </Text>
+                     </children>
+                     <styleClass>
+                        <String fx:value="hover-blue" />
+                        <String fx:value="hover-blue-right" />
+                     </styleClass>
+                  </HBox>
+                  <HBox fx:id="btn_gest_client" layoutX="10.0" layoutY="119.0" onMouseClicked="#ClientLoad">
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                     <children>
+                        <FontAwesomeIcon fill="WHITE" iconName="USERS" size="1.3em" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: white; -fx-font-weight: bold;" text="Gestion des client">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </Text>
+                     </children>
                      <styleClass>
                         <String fx:value="hover-blue" />
                         <String fx:value="hover-blue-right" />
@@ -59,26 +94,6 @@
                      <children>
                         <FontAwesomeIcon fill="WHITE" iconName="LIST" size="1.3em" />
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: white; -fx-font-weight: bold;" text="Gestion des catégories">
-                           <HBox.margin>
-                              <Insets left="10.0" />
-                           </HBox.margin>
-                        </Text>
-                     </children>
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                     <styleClass>
-                        <String fx:value="hover-blue" />
-                        <String fx:value="hover-blue-right" />
-                     </styleClass>
-                  </HBox>
-                  <HBox onMouseClicked="#ProduitLoad">
-                     <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </padding>
-                     <children>
-                        <FontAwesomeIcon fill="WHITE" iconName="LIST" size="1.3em" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: white; -fx-font-weight: bold;" text="Gestion des stocks">
                            <HBox.margin>
                               <Insets left="10.0" />
                            </HBox.margin>
@@ -193,9 +208,39 @@
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: white; -fx-font-size: 1.8em;" text=" Vélo.tn" />
                      </children>
                   </HBox>
+                  <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="780.0">
+                     <children>
+                        <FontAwesomeIcon fill="WHITE" iconName="USER" size="2.3EM">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </FontAwesomeIcon>
+                        <Label fx:id="username_utilisateur" contentDisplay="CENTER" prefHeight="29.0" prefWidth="95.0" textAlignment="CENTER" textFill="WHITE">
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="logout_btn" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#LogoutAction" prefHeight="30.0" prefWidth="33.0" style="-fx-background-color: transparent;" textFill="TRANSPARENT">
+                           <graphic>
+                              <ImageView accessibleRole="BUTTON" fitHeight="22.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/logout.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                     </children>
+                     <HBox.margin>
+                        <Insets left="50.0" />
+                     </HBox.margin>
+                  </HBox>
                </children>
             </HBox>
          </top>
       </BorderPane>
+      <HBox prefHeight="100.0" prefWidth="200.0" />
    </children>
 </AnchorPane>

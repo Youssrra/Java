@@ -127,6 +127,28 @@ public class CategorieService implements IService<Categorie> {
         }
 
     }
+    
+     public List<Categorie> getAll() {
+        String sql = "SELECT * from categorie";
+        List<Categorie> list = new ArrayList<>();
+
+        try {
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+
+            while (rs.next()) {
+                Categorie cc = new Categorie();
+                cc.setId(rs.getInt(1));
+                cc.setNom(rs.getString(2));
+                cc.setDescription(rs.getString(3));
+                list.add(cc);
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(CategorieService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
 
     public List<Categorie> getInfo(int c) {
         String sql = "SELECT * from categorie where id=" + "'" + c + "'";
@@ -148,7 +170,6 @@ public class CategorieService implements IService<Categorie> {
             Logger.getLogger(CategorieService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return list;
-
     }
 
     public void ecrirePdf(int idc, File SavePath) {

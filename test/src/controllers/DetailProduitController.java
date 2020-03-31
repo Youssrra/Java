@@ -25,12 +25,14 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import models.Produit;
+import utils.ConnectionUtil;
 
 /**
  * FXML Controller class
@@ -78,29 +80,42 @@ public class DetailProduitController implements Initializable {
     }
 
     @FXML
-    private void modifier(ActionEvent event) {
-        /* try {
-             
-         Produit produit = produit(reference_produit.getText(),) ;
-         FXMLLoader Loader = new FXMLLoader();
-         Loader.setLocation(getClass().getResource("/views/ModifierUnProduit.fxml"));
-         Parent p = Loader.load();
-         ModifierProduitController display = Loader.getController();
-         display.setProduit(produit);
-         Dialog dialog = new Dialog();
-         dialog.getDialogPane().setContent(p);
-         dialog.initStyle(StageStyle.UNDECORATED);
-         dialog.show();
-         } catch (IOException ex) {
-         Logger.getLogger(GestionCategorieController.class.getName()).log(Level.SEVERE, null, ex);
-         }*/
+    private void modifier(ActionEvent event) throws SQLException {
+        int id = Integer.parseInt(id_produit.getText());
+        String ref = reference_produit.getText();
+        String nom = nom_produit.getText();
+        String image = image_nom_produit.getText();
+        double prix = Double.valueOf(prix_produit.getText());
+        int quantite = Integer.parseInt(quantiter_produit.getText());
+        String n = categorie_produit.getText() ;
+        
+        String ca ;
+        
+        String description = description_produit.getText() ;
+        String marque = marque_produit.getText() ;
+
+
+        try {
+             Produit ppp =   new Produit(id,ref,nom,image,prix,quantite,n,marque,description) ;
+          
+            FXMLLoader Loader = new FXMLLoader();
+            Loader.setLocation(getClass().getResource("/views/ModifierUnProduit.fxml"));
+            Parent p = Loader.load();
+            ModifierProduitController display = Loader.getController();
+            display.setProduit(ppp);
+            Dialog dialog = new Dialog();
+            dialog.getDialogPane().setContent(p);
+            dialog.initStyle(StageStyle.UNDECORATED);
+            dialog.show();
+        } catch (IOException ex) {
+            Logger.getLogger(GestionCategorieController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void setProduit(Produit p) throws SQLException {
         produit = p;
-         String categorie = "booo";
-        //String categorie = categorie_nom(produit.getId_categorie());; //
-    
+        String categorie;
+        String categoriee = categorie_nom(produit.getId_categorie());; //
 
         String prix = String.valueOf(produit.getPrix());
         String qantite = String.valueOf(produit.getQuantite());
@@ -108,10 +123,10 @@ public class DetailProduitController implements Initializable {
         System.out.println(produit);
         reference_produit.setText(produit.getReference());
         nom_produit.setText(produit.getNom());
-        prix_produit.setText(prix + " DT");
+        prix_produit.setText(prix);
         quantiter_produit.setText(qantite);
         marque_produit.setText(produit.getMarque());
-        categorie_produit.setText(categorie);
+        categorie_produit.setText(categoriee);
         description_produit.setText(produit.getDescription());
         id_produit.setText(String.valueOf(produit.getId()));
 
@@ -132,18 +147,27 @@ public class DetailProduitController implements Initializable {
     }
 
     private String categorie_nom(int id) throws SQLException {
-        int idd = id;
-         Statement st = con.createStatement();
-        resultSet = st.executeQuery("select * from categorie where id =" + "'" + id + "'");
-        while (resultSet.next()) {
-            System.out.println(resultSet.getInt(1));
-            System.out.println(resultSet.getString(2));
-            String c = resultSet.getString(2);
-            return c;
-
+        con = ConnectionUtil.conDB();
+        String qry = "SELECT * from categorie where id =" + "'" + id + "'";
+        ResultSet res = con.createStatement().executeQuery(qry);
+        while (res.next()) {
+            return res.getString(2);
         }
         return null;
 
     }
+    
+    private int categorie_id(String nom) throws SQLException {
+        con = ConnectionUtil.conDB();
+        String qry = "SELECT * from categorie where nom =" + "'" + nom + "'";
+        ResultSet res = con.createStatement().executeQuery(qry);
+        while (res.next()) {
+            return res.getInt(1);
+        }
+        return 0;
+
+    }
+
+   
 
 }

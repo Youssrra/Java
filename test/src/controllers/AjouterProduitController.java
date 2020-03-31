@@ -45,6 +45,8 @@ import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import models.Categorie;
+import models.Produit;
+import models.Utilisateur;
 import services.CategorieService;
 import utils.ConnectionUtil;
 
@@ -107,6 +109,7 @@ public class AjouterProduitController implements Initializable {
 
     List<String> listFichier;
     private String nom;
+    public static int id_user;
 
     /**
      * Initializes the controller class.
@@ -164,11 +167,14 @@ public class AjouterProduitController implements Initializable {
         // System.out.println(categorie_produit.getValue().toString());
         String conv = categorie_produit.getValue().toString();
         int categorie = categorie_nom(conv);
-        
-
+        Produit p = new Produit(reference_produit.getText(), nom_produit.getText(), imageProduit, prix, quantite, categorie, marque_produit.getValue(), description_produit.getText(), AccueilPartenaireController.recupererUtilisateurConnecte.getId_Utilisateur());
+        id_user = p.getPartenaire();
+        Utilisateur u = new Utilisateur();
+        u.setId_Utilisateur(id_user);
+        System.out.println(id_user);
         try {
             con = ConnectionUtil.conDB();
-            String st = "INSERT INTO produit (nom,description,reference,image,prix,quantite,id_categorie,marque) VALUES (?,?,?,?,?,?,?,?)";
+            String st = "INSERT INTO produit (nom,description,reference,image,prix,quantite,id_categorie,marque,partenaire) VALUES (?,?,?,?,?,?,?,?,?)";
             preparedStatement = (PreparedStatement) con.prepareStatement(st);
             preparedStatement.setString(1, nom_produit.getText());
             preparedStatement.setString(2, description_produit.getText());
@@ -179,6 +185,7 @@ public class AjouterProduitController implements Initializable {
             preparedStatement.setInt(6, quantite);
             preparedStatement.setInt(7, categorie);
             preparedStatement.setString(8, marque_produit.getValue());
+            preparedStatement.setInt(9, p.getPartenaire());
 
             preparedStatement.executeUpdate();
             new Alert(Alert.AlertType.INFORMATION, "sucess").show();
@@ -251,21 +258,14 @@ public class AjouterProduitController implements Initializable {
     }
 
     private int categorie_nom(String conv) throws SQLException {
-
-        String req = "select * from categorie ";
-        Statement statement = con.createStatement();
-        ResultSet resultSet1 = statement.executeQuery(req);
-        while (resultSet1.next()) {
-            if (conv.equals(resultSet1.getString(2)))
-            {
-            System.out.println(resultSet1.getInt(1));
-            System.out.println(resultSet1.getString(2));
-            return resultSet1.getInt(1) ;
-            }
-            else 
-                System.out.println("NEXT");
+        con = ConnectionUtil.conDB();
+        String qry = "SELECT * from categorie where nom =" + "'" + conv + "'";
+        ResultSet res = con.createStatement().executeQuery(qry);
+        while (res.next()) {
+            return res.getInt(1);
         }
         return 0;
+
     }
 
 }

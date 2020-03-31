@@ -155,32 +155,48 @@ public class LoginController implements Initializable {
             if (nomUtilisater.equals(Uti.getKey())) {
                 if (ServiceLogin.testMotDePasse(motDePasseUtilisateur, Uti.getValue())) {
                     Utilisateur utilisateur = ServiceLogin.getUtilisateur(Uti.getKey());
-                    if (utilisateur.getRole_Utilisateur().equals("a:0:{}")) {
+                    if (utilisateur.getRole_Utilisateur().equals("a:1:{i:0;s:9:\"ROLE_PART\";}")) {
 
                         Stage stage = (Stage) GUI.getScene().getWindow();
                         stage.close();
 
-                        /*   System.out.println("vous etre connecté entant qu'utilisateur");
+                         System.out.println("vous etre connecté entant que partenaire");
                          System.out.println(ServiceLogin.getUtilisateur(Uti.getKey()).getId_Utilisateur());
 
-                         FXMLLoader loader = new FXMLLoader(getClass().getResource("worldfriendship.fxml"));
+                         FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/AccueilPartenaire.fxml"));
                          Parent root = loader.load();
-                         WorldfriendshipController controller = (WorldfriendshipController) loader.getController();
+                         AccueilPartenaireController controller = (AccueilPartenaireController) loader.getController();
+                           
                          controller.recupererUtilisateurConnecte = (ServiceLogin.getUtilisateur(Uti.getKey()));
-
+                         
+                        
+                         
                          Stage primaryStage = new Stage();
-                         Scene scene = new Scene(root);
-                         scene.getStylesheets().add(getClass().getResource("login.css").toExternalForm());
+                         Scene scene = new Scene(root) ;
                          primaryStage.setScene(scene);
-                         primaryStage.show();*/
+                         primaryStage.show();
                         return;
-                    } else {
-                        System.out.println("Vous etre connecté entant qu'admin");
+                    } else if (utilisateur.getRole_Utilisateur().equals("a:1:{i:0;s:10:\"ROLE_ADMIN\";}")) {
+                        System.out.println("Vous etre connecté en tant qu'administrateur");
                         System.out.println(ServiceLogin.getUtilisateur(Uti.getKey()).getId_Utilisateur());
                         //XMLLoader loader = new FXMLLoader(getClass().getResource("views"));
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/Accueil.fxml"));
                         Parent root = loader.load();
                         AccueilController controller = (AccueilController) loader.getController();
+                        controller.recupererUtilisateurConnecte = (ServiceLogin.getUtilisateur(Uti.getKey()));
+                        Stage primaryStage = new Stage();
+                        Scene scene = new Scene(root);
+                        primaryStage.setScene(scene);
+                        primaryStage.show();
+                        return;
+                    }
+                    else {
+                        
+                        System.out.println("Vous etre connecté en tant que client");
+                        System.out.println(ServiceLogin.getUtilisateur(Uti.getKey()).getId_Utilisateur());
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/VeloTn.fxml"));
+                        Parent root = loader.load();
+                        VeloTnController controller = (VeloTnController) loader.getController();
                         controller.recupererUtilisateurConnecte = (ServiceLogin.getUtilisateur(Uti.getKey()));
                         Stage primaryStage = new Stage();
                         Scene scene = new Scene(root);

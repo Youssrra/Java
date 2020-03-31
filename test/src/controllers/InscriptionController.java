@@ -28,6 +28,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.mindrot.jbcrypt.BCrypt;
 import utils.ConnectionUtil;
 
 /**
@@ -36,6 +37,7 @@ import utils.ConnectionUtil;
  * @author ASUS
  */
 public class InscriptionController implements Initializable {
+
     @FXML
     private TextField txtUsername;
     @FXML
@@ -56,13 +58,13 @@ public class InscriptionController implements Initializable {
     Connection con = null;
     PreparedStatement preparedStatement = null;
     ResultSet resultSet = null;
-    
+
     /**
      * Initializes the controller class.
      */
-        @FXML
+    @FXML
     private void handleButtonAction(MouseEvent event) {
-             if (event.getSource() == btnSignup) {
+        if (event.getSource() == btnSignup) {
             //login here
             if (SignUp().equals("Success")) {
                 try {
@@ -88,38 +90,36 @@ public class InscriptionController implements Initializable {
 
     @FXML
     private void handleButtonAction2(MouseEvent event) throws IOException {
-       
-                  //add you loading or delays - ;-)
-                    Node node = (Node) event.getSource();
-                    Stage stage = (Stage) node.getScene().getWindow();
-                    //stage.setMaximized(true);
-                    stage.close();
-                    Scene scene = new Scene(FXMLLoader.load(getClass().getResource("/views/Login.fxml")));
-                    stage.getIcons().add(new Image("/images/logo.png"));
-                    stage.setTitle("Se connecter");
-                    stage.setScene(scene);
-                    stage.show();
-                 
 
-                
-            }
-    
+        //add you loading or delays - ;-)
+        Node node = (Node) event.getSource();
+        Stage stage = (Stage) node.getScene().getWindow();
+        //stage.setMaximized(true);
+        stage.close();
+        Scene scene = new Scene(FXMLLoader.load(getClass().getResource("/views/Login.fxml")));
+        stage.getIcons().add(new Image("/images/logo.png"));
+        stage.setTitle("Se connecter");
+        stage.setScene(scene);
+        stage.show();
+
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-          if (con == null) {
+        if (con == null) {
             lblErrors.setTextFill(Color.TOMATO);
             lblErrors.setText("Server Error : Vérifier votre connexion");
         } else {
             lblErrors.setTextFill(Color.GREEN);
             lblErrors.setText("Server is up : Vous pouvez vous connecter");
         }
-    } 
-    
-     public InscriptionController() {
+    }
+
+    public InscriptionController() {
         con = ConnectionUtil.conDB();
     }
-     
+
     private void clearFields() {
         txtUsername.clear();
         txtNom.clear();
@@ -127,57 +127,61 @@ public class InscriptionController implements Initializable {
         txtEmail.clear();
         txtPassword.clear();
     }
-     private String SignUp() {
-         
-         String status = "Success";
-         String username = txtUsername.getText();
-         String password = txtPassword.getText();
-         String nom = txtNom.getText();
-         String prenom = txtPrenom.getText();
-         String email = txtEmail.getText();
 
-        if(prenom.isEmpty() ||nom.isEmpty() ||username.isEmpty() ||email.isEmpty() || password.isEmpty()) {
+    private String SignUp() {
+
+        String status = "Success";
+        String username = txtUsername.getText();
+        String password = txtPassword.getText();
+        String nom = txtNom.getText();
+        String prenom = txtPrenom.getText();
+        String email = txtEmail.getText();
+
+        String role = "a:1:{i:0;s:11:\"ROLE_CLIENT\";}";
+        String mdp = BCrypt.hashpw(password, BCrypt.gensalt(13));
+        mdp = mdp.replaceFirst("2a", "2y");
+
+        if (prenom.isEmpty() || nom.isEmpty() || username.isEmpty() || email.isEmpty() || password.isEmpty()) {
             setLblError(Color.TOMATO, "Veuillez vérifier votre saisie...");
             status = "Error";
         } else {
             //query
             try {
-            String st = "INSERT INTO fos_user ( username,nom,prenom,email,password) VALUES (?,?,?,?,?)";
-            preparedStatement = (PreparedStatement) con.prepareStatement(st);
-            preparedStatement.setString(1, txtUsername.getText());
-            preparedStatement.setString(2, txtNom.getText());
-            preparedStatement.setString(3, txtPrenom.getText());
-            preparedStatement.setString(4, txtEmail.getText());
-            preparedStatement.setString(5, txtPrenom.getText());
+                String st = "INSERT INTO fos_user ( username,nom,prenom,email,password,roles,enabled,username_canonical,email_canonical) VALUES (?,?,?,?,?,?,?,?,?)";
+                preparedStatement = (PreparedStatement) con.prepareStatement(st);
+                preparedStatement.setString(1, txtUsername.getText());
+                preparedStatement.setString(2, txtNom.getText());
+                preparedStatement.setString(3, txtPrenom.getText());
+                preparedStatement.setString(4, txtEmail.getText());
+                preparedStatement.setString(5, mdp);
+                preparedStatement.setString(6, role);
+                preparedStatement.setInt(7,1);
+                preparedStatement.setString(8, txtUsername.getText());
+                preparedStatement.setString(9, txtEmail.getText());
 
-            preparedStatement.executeUpdate();
-            lblErrors.setTextFill(Color.GREEN);
-            lblErrors.setText("Inscription effectuer avec succée voous allez bientot étre rediriger ...");
+                preparedStatement.executeUpdate();
+                lblErrors.setTextFill(Color.GREEN);
+                lblErrors.setText("Inscription effectuer avec succée voous allez bientot étre rediriger ...");
            // fetRowList();
-            //clear fields
-            clearFields();
-            return "Success";
+                //clear fields
+                clearFields();
+                return "Success";
 
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            lblErrors.setTextFill(Color.TOMATO);
-            lblErrors.setText(ex.getMessage());
-            return "Exception";
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+                lblErrors.setTextFill(Color.TOMATO);
+                lblErrors.setText(ex.getMessage());
+                return "Exception";
+            }
         }
-        }
-        
+
         return status;
     }
-    
+
     private void setLblError(Color color, String text) {
         lblErrors.setTextFill(color);
         lblErrors.setText(text);
         System.out.println(text);
     }
 
-    }
-    
-
-
-
-
+}

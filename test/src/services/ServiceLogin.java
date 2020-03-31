@@ -11,6 +11,8 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import models.Utilisateur;
 import java.sql.DriverManager;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ServiceLogin {
 
@@ -28,44 +30,6 @@ public class ServiceLogin {
         }
 
         return connexion;
-    }
-
-    public static int Inscription(Utilisateur utilisateur) {
-        // Define the BCrypt workload to use when generating password hashes. 10-31 is a valid value en regarde le cryptage de fosuserbundle il utilise $2y$13$.
-        int workload = 13;
-        int status = 0;
-        String sql = "INSERT INTO fos_user(username,password,email,roles,enabled,username_canonical) VALUES(?,?,?,?,?,?)";
-        System.out.println(sql);
-
-        try {
-            Connection connexion = ServiceLogin.creationConnexion();
-            PreparedStatement preparedStatement = (PreparedStatement) connexion.prepareStatement(sql);
-            preparedStatement.setString(1, utilisateur.getNom_Utilisateur());
-            String mdp = BCrypt.hashpw(utilisateur.getMotDePasse_Utilisateur(), BCrypt.gensalt(workload));
-            preparedStatement.setString(2, mdp.replaceFirst("2a", "2y"));
-            preparedStatement.setString(3, utilisateur.getEmail());
-            preparedStatement.setString(4, "a:0:{}");
-            preparedStatement.setInt(5, 1);
-            preparedStatement.setString(6, utilisateur.getNom_Utilisateur());
-            status = preparedStatement.executeUpdate();
-            connexion.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return status;
-    }
-
-    public static boolean testMotDePasse(String motDePasseGUI, String motDePasseBD) {
-        boolean password_verified = false;
-
-        if (null == motDePasseBD) {
-            throw new java.lang.IllegalArgumentException("Invalid hash provided for comparison");
-        }
-
-        // en remplaçant 2y par 2a le cryptage on obtient le cryptage par defaut pour que la methode checkpw puisse comparer
-        password_verified = BCrypt.checkpw(motDePasseGUI, motDePasseBD.replaceFirst("2y", "2a"));
-
-        return (password_verified);
     }
 
     public static List<Utilisateur> getTtUtilisateur() {
@@ -114,5 +78,31 @@ public class ServiceLogin {
         }
         return utilisateur;
 
+    }
+
+    public static boolean testMotDePasse(String motDePasseGUI, String motDePasseBD) {
+
+        boolean password_verified = false;
+
+        if (null == motDePasseBD) {
+            throw new java.lang.IllegalArgumentException("Invalid hash provided for comparison");
+        }
+        password_verified = BCrypt.checkpw(motDePasseGUI, motDePasseBD.replaceFirst("2y", "2a"));
+
+        return (password_verified);
+    }
+
+    public void supprimer(String x) {
+        Connection con = ServiceLogin.creationConnexion();
+        String sql = "DELETE FROM fos_user WHERE username = ? ";
+        try {
+            PreparedStatement statement = con.prepareStatement(sql);
+            statement.setString(1, x);
+            statement.executeUpdate();
+            System.out.println("Utilisateur Supprimer");
+        } catch (SQLException ex) {
+            Logger.getLogger(CategorieService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println("Utilisateur non Supprimer");
     }
 }

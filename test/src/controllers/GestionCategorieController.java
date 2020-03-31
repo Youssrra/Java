@@ -73,7 +73,6 @@ public class GestionCategorieController implements Initializable {
     PreparedStatement preparedStatement = null;
     ResultSet resultSet = null;
     Statement ste;
-
     @FXML
     private BorderPane borderpane;
     @FXML

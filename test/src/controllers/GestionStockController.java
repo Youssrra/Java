@@ -40,6 +40,7 @@ import javafx.stage.StageStyle;
 import javax.swing.JFileChooser;
 import models.Categorie;
 import models.Produit;
+import models.Utilisateur;
 import services.CategorieService;
 import services.ProduitService;
 import utils.ConnectionUtil;
@@ -83,6 +84,10 @@ public class GestionStockController implements Initializable {
     Statement ste;
     @FXML
     private JFXTextField filterField;
+    public static int id_user;
+
+    // public static Utilisateur recupererUtilisateurConnecte;
+    Utilisateur recupererUtilisateurConnecter;
 
     /**
      * Initializes the controller class.
@@ -90,6 +95,7 @@ public class GestionStockController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+
         AfficherProduit();
         Recherche();
 
@@ -97,8 +103,11 @@ public class GestionStockController implements Initializable {
 
     private void AfficherProduit() {
 
+        int idp = AccueilPartenaireController.recupererUtilisateurConnecte.getId_Utilisateur();
+        System.out.println(idp);
+
         con = ConnectionUtil.conDB();
-        String qry = "SELECT * from produit";
+        String qry = "SELECT * from produit where partenaire =" + "'" + idp + "'";
         try {
 
             ResultSet res = con.createStatement().executeQuery(qry);
@@ -237,7 +246,7 @@ public class GestionStockController implements Initializable {
 
     @FXML
     private void detail(ActionEvent event) throws SQLException {
-            try {
+        try {
             Produit produit = liste_produit.getSelectionModel().getSelectedItem();
             FXMLLoader Loader = new FXMLLoader();
             Loader.setLocation(getClass().getResource("/views/DetailProduit.fxml"));
@@ -252,7 +261,7 @@ public class GestionStockController implements Initializable {
             Logger.getLogger(GestionCategorieController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     @FXML
     private void exporterPDF(ActionEvent event) {
         Produit selectedItem = liste_produit.getSelectionModel().getSelectedItem();
@@ -288,7 +297,5 @@ public class GestionStockController implements Initializable {
     @FXML
     private void modifier(MouseEvent event) {
     }
-
-
 
 }
