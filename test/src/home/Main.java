@@ -36,7 +36,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/views/Login.fxml"));
+        //Parent root = FXMLLoader.load(getClass().getResource("/views/Login.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/views/VeloTn.fxml"));
         Scene scene = new Scene(root);
         scene.setFill(Color.TRANSPARENT);
         stage.initStyle(StageStyle.TRANSPARENT);

@@ -29,7 +29,7 @@
       </HBox>
       <HBox prefHeight="69.0" prefWidth="898.0" styleClass="header-dialog">
          <children>
-            <Label prefHeight="49.0" prefWidth="689.0" text="Ajout d'un produit" textAlignment="JUSTIFY" textFill="#429aff">
+            <Label prefHeight="49.0" prefWidth="689.0" text="Modification d'un produit" textAlignment="JUSTIFY" textFill="#429aff">
                <font>
                   <Font name="Chrisye" size="26.0" />
                </font>

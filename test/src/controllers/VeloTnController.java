@@ -61,7 +61,7 @@ public class VeloTnController implements Initializable {
         Parent root = null;
         try {
             root = FXMLLoader.load(getClass().getResource("/views/" + ui + ".fxml"));
-            String c = recupererUtilisateurConnecte.getNom_Utilisateur();
+//            String c = recupererUtilisateurConnecte.getNom_Utilisateur();
            // username_utilisateur.setText(c);
             //System.out.println(c);
         } catch (IOException ex) {
