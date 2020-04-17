@@ -323,6 +323,35 @@ public class ProduitService implements IServiceProduit<Produit> {
         return list;
     }
 
+    public List<Produit> getAllFilterMaqProd(String m) {
+        
+         
+        String requete = "select * from produit where marque="+"'"+m+"'";
+        List<Produit> list = new ArrayList<>();
+        try {
+            ste = con.createStatement();
+            rs = ste.executeQuery(requete);
+           
+            while (rs.next()) {
+                Produit p = new Produit();
+                p.setId(rs.getInt("id"));
+                p.setNom(rs.getString("nom"));
+                p.setDescription(rs.getString("description"));
+                p.setMarque(rs.getString("marque"));
+                p.setId_categorie(rs.getInt("id_categorie"));
+                p.setPartenaire(rs.getInt("partenaire"));
+                p.setPrix(rs.getDouble("prix"));
+                p.setQuantite(rs.getInt("quantite"));
+                p.setReference(rs.getString("reference"));
+                p.setImage(rs.getString("image"));
+                list.add(p);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CategorieService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+
  
 
 }

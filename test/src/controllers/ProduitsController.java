@@ -100,6 +100,9 @@ public class ProduitsController implements Initializable {
     @FXML
     private JFXButton btn_searchp;
     ToggleGroup gp = new ToggleGroup();
+    @FXML
+    private VBox filter_marque;
+    ToggleGroup gp2 = new ToggleGroup();
 
     /**
      * Initializes the controller class.
@@ -109,6 +112,7 @@ public class ProduitsController implements Initializable {
         // TODO
         afficherProduit();
         FiltreParCategorie();
+        FiltreParMarque() ;
         btn_searchp.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -117,20 +121,32 @@ public class ProduitsController implements Initializable {
             }
         });
 
-  
-
-       gp.selectedToggleProperty().addListener(new ChangeListener<Toggle>()
-        {
+        gp.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
             @Override
-            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldToggle, Toggle newToggle)
-            {
+            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldToggle, Toggle newToggle) {
                 //print new selected value after change
-                System.out.println("Selected Radio Button: " + ((RadioButton)newToggle).getText());
-                String c = ((RadioButton)newToggle).getText() ;
+                System.out.println("Selected Catégorie: " + ((RadioButton) newToggle).getText());
+                String c = ((RadioButton) newToggle).getText();
                 int cat = categorieService.getIdCategorie(c);
-               // System.out.print("test categ    /"+cat);
+                // System.out.print("test categ    /"+cat);
                 flowPane.getChildren().clear();
-                filtre(cat) ;
+                int f = 1 ;
+                filtre(cat,"",f);
+            }
+
+        });
+        
+          gp2.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            @Override
+            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldToggle, Toggle newToggle) {
+                //print new selected value after change
+                System.out.println("Selected Marque: " + ((RadioButton) newToggle).getText());
+                String maq = ((RadioButton) newToggle).getText();
+               // int cat = categorieService.getIdCategorie(c);
+                System.out.print("test marque    /"+maq);
+                flowPane.getChildren().clear();
+                int f = 2 ;
+                filtre(0,maq,f);
             }
 
         });
@@ -234,9 +250,35 @@ public class ProduitsController implements Initializable {
         for (int i = 0; i < list.size(); i++) {
             RadioButton b1 = new RadioButton(list.get(i).getNom());
             b1.setToggleGroup(gp);
+          
             filter_categorie.setSpacing(10);
             filter_categorie.getChildren().addAll(b1);
 
+        }
+
+    }
+
+    public void FiltreParMarque() {
+        ArrayList<String> marque = new ArrayList<String>();
+        marque.add("Atala");
+        marque.add("Atom Bicycles");
+        marque.add("BH Bikes");
+        marque.add("Bianchi");
+        marque.add("Bike by Me");
+        marque.add("BMC");
+        marque.add("BTwin");
+        marque.add("Cannondale Bicycles");
+        marque.add("Canyon");
+        marque.add("Giant");
+        
+        
+
+        for (int i = 0; i < marque.size(); i++) {
+            RadioButton b1 = new RadioButton(marque.get(i));
+            b1.setToggleGroup(gp2);
+            filter_marque.setSpacing(10);
+            filter_marque.getChildren().addAll(b1);
+            
         }
 
     }
@@ -337,12 +379,17 @@ public class ProduitsController implements Initializable {
         }
 
     }
-    
-     private void filtre(int cat) {
-         
+
+    private void filtre(int cat,String m ,int f) {
          ProduitService sp = new ProduitService();
         List<Produit> list = null;
-        list = sp.getAllFilterCatProd(cat);
+        if (f == 1)
+        {
+            list = sp.getAllFilterCatProd(cat);
+        }
+        else{
+            list = sp.getAllFilterMaqProd(m);
+        }
         ArrayList<VBox> vbx = new ArrayList<>();
         ServicePanier panierService = new ServicePanier();
         //ArrayList<Panier> listPanier = (ArrayList<Panier>) panierService.getPanier();
@@ -423,7 +470,6 @@ public class ProduitsController implements Initializable {
                 }
             }
         }
-   
-     
-     }
+
+    }
 }

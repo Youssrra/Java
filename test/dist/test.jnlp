@@ -36,7 +36,7 @@
     <jar href="lib\spring-security-crypto-3.1.2.release.jar" size="41154" download="eager" />
     <jar href="lib\tachyons-font-family-4.1.2.jar" size="6735" download="eager" />
     <jar href="lib\twilio-7.17.7.jar" size="2801356" download="eager" />
-    <jar href="test.jar" size="5902544" download="eager" />
+    <jar href="test.jar" size="5904889" download="eager" />
   </resources>
   <applet-desc  width="800" height="600" main-class="com.javafx.main.NoJavaFXFallback"  name="test" >
     <param name="requiredFXVersion" value="8.0+"/>
