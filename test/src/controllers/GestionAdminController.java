@@ -6,11 +6,13 @@
 package controllers;
 
 import com.jfoenix.controls.JFXTextField;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -21,14 +23,18 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.StageStyle;
 import models.Utilisateur;
 import services.ServiceLogin;
 import utils.ConnectionUtil;
@@ -79,6 +85,15 @@ public class GestionAdminController implements Initializable {
 
     @FXML
     private void ajouter(ActionEvent event) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/views/InscriptionAdmin.fxml"));
+            Dialog dialog = new Dialog();
+            dialog.getDialogPane().setContent(root);
+            dialog.initStyle(StageStyle.UNDECORATED);
+            dialog.show();
+        } catch (IOException ex) {
+            Logger.getLogger(GestionPartenaireController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @FXML
@@ -106,43 +121,25 @@ public class GestionAdminController implements Initializable {
     @FXML
     private void reafficher_categorie(MouseEvent event) {
         ListAdmin.clear();
-        AfficherAdmin() ;
-        Recherche() ;
+        AfficherAdmin();
+        Recherche();
     }
-    
+
     private void AfficherAdmin() {
 
-        con = ConnectionUtil.conDB();
+        
         String role = "a:1:{i:0;s:10:\"ROLE_ADMIN\";}";
-        String qry = "SELECT * from fos_user where roles =" + "'" + role + "'";
-        try {
+        ServiceLogin forumService = new ServiceLogin();       
+        ArrayList arrayList1 = (ArrayList) forumService.AfficherClien(role);
+        ListAdmin = FXCollections.observableArrayList(arrayList1);
 
-            ResultSet res = con.createStatement().executeQuery(qry);
+        id_admin.setCellValueFactory(new PropertyValueFactory<>("id_Utilisateur"));
+        nom_admin.setCellValueFactory(new PropertyValueFactory<>("nom_Utilisateur"));
+        prenom_admin.setCellValueFactory(new PropertyValueFactory<>("prenom_Utilisateur"));
+        username_admin.setCellValueFactory(new PropertyValueFactory<>("username_Utilisateur"));
+        email_admin.setCellValueFactory(new PropertyValueFactory<>("email"));
 
-            while (res.next()) {
-                Utilisateur utilisateur = new Utilisateur();
-                utilisateur.setId_Utilisateur(res.getInt("id"));
-                utilisateur.setNom_Utilisateur(res.getString("nom"));
-                utilisateur.setPrenom_Utilisateur(res.getString("prenom"));
-                utilisateur.setUsername_Utilisateur(res.getString("username"));
-                utilisateur.setEmail(res.getString("email"));
-                utilisateur.setRole_Utilisateur(res.getString("roles"));
-                utilisateur.setMotDePasse_Utilisateur(res.getString("password"));
-
-                ListAdmin.add(utilisateur);
-
-                id_admin.setCellValueFactory(new PropertyValueFactory<>("id_Utilisateur"));
-                nom_admin.setCellValueFactory(new PropertyValueFactory<>("nom_Utilisateur"));
-                prenom_admin.setCellValueFactory(new PropertyValueFactory<>("prenom_Utilisateur"));
-                username_admin.setCellValueFactory(new PropertyValueFactory<>("username_Utilisateur"));
-                email_admin.setCellValueFactory(new PropertyValueFactory<>("email"));
-
-                liste_admin.setItems(ListAdmin);
-
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(GestionCategorieController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        liste_admin.setItems(ListAdmin);
     }
 
     private void Recherche() {
@@ -172,6 +169,24 @@ public class GestionAdminController implements Initializable {
         int selectedIndex = liste_admin.getSelectionModel().getSelectedIndex();
         System.out.println(selectedItem);
         return selectedItem;
+    }
+
+    @FXML
+    private void mod(ActionEvent event) {
+            try {
+            Utilisateur u = liste_admin.getSelectionModel().getSelectedItem();
+            FXMLLoader Loader = new FXMLLoader();
+            Loader.setLocation(getClass().getResource("/views/ModifierUnUtilisateur.fxml"));
+            Parent p = Loader.load();
+            ModifierUtilisateurController display = Loader.getController();
+            display.setUtilisateur(u);
+            Dialog dialog = new Dialog();
+            dialog.getDialogPane().setContent(p);
+            dialog.initStyle(StageStyle.UNDECORATED);
+            dialog.show();
+        } catch (IOException ex) {
+            Logger.getLogger(GestionClientController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

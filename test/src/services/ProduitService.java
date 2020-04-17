@@ -266,6 +266,63 @@ public class ProduitService implements IServiceProduit<Produit> {
 
     }
 
+    public List<Produit> getAllSearchedProd(String search) {
+        String c ="sq";
+         String requete = "select * from produit where CONCAT(nom,description,reference,prix,marque) LIKE '%"+search+"%' ";
+        List<Produit> list = new ArrayList<>();
+        try {
+            ste = con.createStatement();
+            rs = ste.executeQuery(requete);
+           
+            while (rs.next()) {
+                Produit p = new Produit();
+                p.setId(rs.getInt("id"));
+                p.setNom(rs.getString("nom"));
+                p.setDescription(rs.getString("description"));
+                p.setMarque(rs.getString("marque"));
+                p.setId_categorie(rs.getInt("id_categorie"));
+                p.setPartenaire(rs.getInt("partenaire"));
+                p.setPrix(rs.getDouble("prix"));
+                p.setQuantite(rs.getInt("quantite"));
+                p.setReference(rs.getString("reference"));
+                p.setImage(rs.getString("image"));
+                list.add(p);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CategorieService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+       
+    }
+
+    public List<Produit> getAllFilterCatProd(int cat){
+        
+        String requete = "select * from produit where id_categorie="+"'"+cat+"'";
+        List<Produit> list = new ArrayList<>();
+        try {
+            ste = con.createStatement();
+            rs = ste.executeQuery(requete);
+           
+            while (rs.next()) {
+                Produit p = new Produit();
+                p.setId(rs.getInt("id"));
+                p.setNom(rs.getString("nom"));
+                p.setDescription(rs.getString("description"));
+                p.setMarque(rs.getString("marque"));
+                p.setId_categorie(rs.getInt("id_categorie"));
+                p.setPartenaire(rs.getInt("partenaire"));
+                p.setPrix(rs.getDouble("prix"));
+                p.setQuantite(rs.getInt("quantite"));
+                p.setReference(rs.getString("reference"));
+                p.setImage(rs.getString("image"));
+                list.add(p);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CategorieService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+
  
 
 }

@@ -39,9 +39,18 @@
                                     </ImageView>
                                  </graphic>
                               </JFXButton>
+                              <JFXButton buttonType="RAISED" minHeight="-Infinity" minWidth="-Infinity" onAction="#mod" prefHeight="45.0" prefWidth="48.0" style="-fx-background-color: transparent;" textFill="#ffffff00">
+                                 <graphic>
+                                    <ImageView accessibleRole="BUTTON" fitHeight="33.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/edit.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </JFXButton>
                               <ImageView accessibleRole="BUTTON" fitHeight="42.0" fitWidth="46.0" onMouseClicked="#reafficher_categorie" pickOnBounds="true" preserveRatio="true">
                                  <HBox.margin>
-                                    <Insets left="640.0" />
+                                    <Insets left="600.0" />
                                  </HBox.margin>
                                  <image>
                                     <Image url="@../images/reload.png" />

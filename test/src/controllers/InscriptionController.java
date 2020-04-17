@@ -11,7 +11,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -25,10 +28,19 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import org.mindrot.jbcrypt.BCrypt;
+import services.ServiceLogin;
 import utils.ConnectionUtil;
 
 /**
@@ -37,7 +49,6 @@ import utils.ConnectionUtil;
  * @author ASUS
  */
 public class InscriptionController implements Initializable {
-
     @FXML
     private TextField txtUsername;
     @FXML
@@ -49,8 +60,6 @@ public class InscriptionController implements Initializable {
     @FXML
     private TextField txtNom;
     @FXML
-    private Button btnSignin;
-    @FXML
     private TextField txtPrenom;
     @FXML
     private TextField txtEmail;
@@ -59,15 +68,69 @@ public class InscriptionController implements Initializable {
     PreparedStatement preparedStatement = null;
     ResultSet resultSet = null;
 
+    static String code;
+    private static final String ALPHA_NUMERIC_STRING = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    @FXML
+    private AnchorPane GUI2;
+    @FXML
+    private TextField txtcode;
+    @FXML
+    private Label lblErrors_code;
+    @FXML
+    private Button btn_verif_code;
+    @FXML
+    private HBox btn_close_code;
+
+   static String nomFenere;
+   static String nomScene;
+   static String status = "Success";
+   static String username;
+   static String password;
+   static String nom;
+   static String prenom;
+   static String email;
+   static String mdp;
+   static String role;
+
     /**
      * Initializes the controller class.
      */
     @FXML
-    private void handleButtonAction(MouseEvent event) {
+    private void handleButtonAction(MouseEvent event) throws MessagingException {
         if (event.getSource() == btnSignup) {
             //login here
-            if (SignUp().equals("Success")) {
+          SignUp();
+            try {
+                
+                //add you loading or delays - ;-)
+                Node node = (Node) event.getSource();
+                Stage stage = (Stage) node.getScene().getWindow();
+                //stage.setMaximized(true);
+                //  stage.close();
+                Scene scene = new Scene(FXMLLoader.load(getClass().getResource("/views/VerifierInscriMail.fxml")));
+                stage.getIcons().add(new Image("/images/logo.png"));
+                stage.setTitle("Verification");
+                stage.setScene(scene);
+                stage.show();
+
+            } catch (IOException ex) {
+                System.err.println(ex.getMessage());
+            }
+
+        }
+    }
+
+    @FXML
+    private void handleButtonAction22(MouseEvent event) {
+        if (event.getSource() == btn_verif_code) {
+            if (txtcode.getText().equals(code)) {
                 try {
+                    System.out.println("Code :" + code);
+                    lblErrors_code.setText("code verifier");
+                    lblErrors_code.setTextFill(Color.GREEN);
+                    ServiceLogin sl = new ServiceLogin();
+                    sl.Inscription(username, nom, prenom, email, mdp, role);
+                   // clearFields();
 
                     //add you loading or delays - ;-)
                     Node node = (Node) event.getSource();
@@ -79,12 +142,13 @@ public class InscriptionController implements Initializable {
                     stage.setTitle("Se connecter");
                     stage.setScene(scene);
                     stage.show();
-
                 } catch (IOException ex) {
-                    System.err.println(ex.getMessage());
+                    Logger.getLogger(InscriptionController.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
             }
+        } else {
+            lblErrors_code.setText("Code saisie incorrect veuiller réessayer");
         }
     }
 
@@ -107,13 +171,7 @@ public class InscriptionController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        if (con == null) {
-            lblErrors.setTextFill(Color.TOMATO);
-            lblErrors.setText("Server Error : Vérifier votre connexion");
-        } else {
-            lblErrors.setTextFill(Color.GREEN);
-            lblErrors.setText("Server is up : Vous pouvez vous connecter");
-        }
+
     }
 
     public InscriptionController() {
@@ -128,60 +186,89 @@ public class InscriptionController implements Initializable {
         txtPassword.clear();
     }
 
-    private String SignUp() {
+    private void SignUp() {
+        status = "Success";
+        username = txtUsername.getText();
+        password = txtPassword.getText();
+        nom = txtNom.getText();
+        prenom = txtPrenom.getText();
+        email = txtEmail.getText();
 
-        String status = "Success";
-        String username = txtUsername.getText();
-        String password = txtPassword.getText();
-        String nom = txtNom.getText();
-        String prenom = txtPrenom.getText();
-        String email = txtEmail.getText();
-
-        String role = "a:1:{i:0;s:11:\"ROLE_CLIENT\";}";
-        String mdp = BCrypt.hashpw(password, BCrypt.gensalt(13));
+        role = "a:1:{i:0;s:11:\"ROLE_CLIENT\";}";
+        mdp = BCrypt.hashpw(password, BCrypt.gensalt(13));
         mdp = mdp.replaceFirst("2a", "2y");
 
-        if (prenom.isEmpty() || nom.isEmpty() || username.isEmpty() || email.isEmpty() || password.isEmpty()) {
-            setLblError(Color.TOMATO, "Veuillez vérifier votre saisie...");
+        System.out.println(email.matches(".+@.+\\.[a-z]+"));
+
+        if (prenom.isEmpty() || email.matches(".+@.+\\.[a-z]+") == false || nom.isEmpty() || username.isEmpty() || email.isEmpty() || password.isEmpty()) {
+            lblErrors.setText("Veuillez vérifier votre saisie...");
             status = "Error";
-        } else {
-            //query
+        }
+       else {
+            code = randomAlphaNumeric();
+            String text = "Votre code de vérification est : " + code;
+            String ut = txtEmail.getText();
             try {
-                String st = "INSERT INTO fos_user ( username,nom,prenom,email,password,roles,enabled,username_canonical,email_canonical) VALUES (?,?,?,?,?,?,?,?,?)";
-                preparedStatement = (PreparedStatement) con.prepareStatement(st);
-                preparedStatement.setString(1, txtUsername.getText());
-                preparedStatement.setString(2, txtNom.getText());
-                preparedStatement.setString(3, txtPrenom.getText());
-                preparedStatement.setString(4, txtEmail.getText());
-                preparedStatement.setString(5, mdp);
-                preparedStatement.setString(6, role);
-                preparedStatement.setInt(7,1);
-                preparedStatement.setString(8, txtUsername.getText());
-                preparedStatement.setString(9, txtEmail.getText());
-
-                preparedStatement.executeUpdate();
-                lblErrors.setTextFill(Color.GREEN);
-                lblErrors.setText("Inscription effectuer avec succée voous allez bientot étre rediriger ...");
-           // fetRowList();
-                //clear fields
-                clearFields();
-                return "Success";
-
-            } catch (SQLException ex) {
-                System.out.println(ex.getMessage());
-                lblErrors.setTextFill(Color.TOMATO);
-                lblErrors.setText(ex.getMessage());
-                return "Exception";
+                sendMail(ut, "Validation de votre adresse mail", text);
+            } catch (MessagingException ex) {
+                Logger.getLogger(InscriptionController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
-        return status;
+
     }
 
     private void setLblError(Color color, String text) {
         lblErrors.setTextFill(color);
         lblErrors.setText(text);
         System.out.println(text);
+    }
+
+    public static String randomAlphaNumeric() {
+        int count = 6;
+        StringBuilder builder = new StringBuilder();
+        while (count-- != 0) {
+            int character = (int) (Math.random() * ALPHA_NUMERIC_STRING.length());
+            builder.append(ALPHA_NUMERIC_STRING.charAt(character));
+        }
+        return builder.toString();
+    }
+
+    public void sendMail(String addresse, String subject, String message) throws MessagingException {
+        String from = "velotunisie5@gmail.com";
+        String pass = "velotn2020";
+        String[] to = {addresse};
+        String host = "smtp.gmail.com";
+
+        Properties prop = System.getProperties();
+        prop.put("mail.smtp.starttls.enable", "true");
+        prop.put("mail.smtp.host", host);
+        prop.put("mail.smtp.user", from);
+        prop.put("mail.smtp.password", pass);
+        prop.put("mail.smtp.port", "587");
+        prop.put("mail.smtp.auth", "true");
+        prop.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+        prop.put("mail.smtp.host", "smtp.gmail.com");
+
+        Session session = Session.getDefaultInstance(prop);
+        MimeMessage meg = new MimeMessage(session);
+        meg.setFrom(new InternetAddress(from));
+        InternetAddress[] toadress = new InternetAddress[to.length];
+        for (int i = 0; i < to.length; i++) {
+            toadress[i] = new InternetAddress(to[i]);
+        }
+
+        for (int i = 0; i < to.length; i++) {
+            meg.setRecipient(Message.RecipientType.TO, toadress[i]);
+        }
+
+        meg.setSubject(subject);
+        meg.setContent(message, "text/html; charset=utf-8");
+        Transport transport = session.getTransport("smtp");
+        transport.connect(host, from, pass);
+        transport.sendMessage(meg, meg.getAllRecipients());
+        transport.close();
+
     }
 
 }

@@ -101,7 +101,6 @@ public class ModifierCategorieController implements Initializable {
                 cs.modifier(id, nom, description);
 
             } else if (result.get() == ButtonType.CANCEL) {
-                
 
             }
 

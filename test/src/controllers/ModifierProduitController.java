@@ -6,6 +6,7 @@
 package controllers;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import java.io.File;
@@ -35,6 +36,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -42,6 +44,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import models.Categorie;
 import models.Produit;
+import models.Utilisateur;
 import services.CategorieService;
 import services.ProduitService;
 import utils.ConnectionUtil;
@@ -57,40 +60,18 @@ public class ModifierProduitController implements Initializable {
     private Button btn_close;
     @FXML
     private VBox bp;
-    @FXML
     private JFXTextField reference_produit;
-    @FXML
-    private Label errors_reference;
-    @FXML
     private JFXTextField nom_produit;
     @FXML
     private Label errors_nom;
-    @FXML
     private JFXTextField prix_produit;
-    @FXML
-    private Label errors_prix;
-    @FXML
     private JFXTextField quantite_produit;
-    @FXML
-    private Label errors_quantite;
-    @FXML
     private ComboBox<String> marque_produit;
-    @FXML
-    private Label errors_marque;
-    @FXML
     private ComboBox<String> categorie_produit;
-    @FXML
-    private Label errors_categorie;
-    @FXML
     private JFXTextArea description_produit;
-    @FXML
-    private Label errors_description;
-    @FXML
     private ImageView imageProduitPreview;
     @FXML
     private Label errors_image;
-    @FXML
-    private Button importerImage;
     @FXML
     private JFXButton modifier_produit_btn;
 
@@ -102,7 +83,7 @@ public class ModifierProduitController implements Initializable {
     @FXML
     private JFXTextField id_produit_modifier;
     List<String> listFichier;
-
+  
 
     /**
      * Initializes the controller class.
@@ -218,7 +199,6 @@ public class ModifierProduitController implements Initializable {
         }
     }
 
-    @FXML
     private void importerProduitImage(ActionEvent event) throws FileNotFoundException, IOException {
         FileChooser fc = new FileChooser();
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("Images", listFichier));
@@ -252,6 +232,10 @@ public class ModifierProduitController implements Initializable {
         } else if (f == null) {
             errors_image.setText("Erreur chargement de l'image");
         }
+    }
+
+    void setUtilisateur(Utilisateur utilisateur) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

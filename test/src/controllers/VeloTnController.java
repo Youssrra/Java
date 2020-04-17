@@ -17,6 +17,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import models.Utilisateur;
@@ -34,6 +35,10 @@ public class VeloTnController implements Initializable {
     
     public static Utilisateur recupererUtilisateurConnecte;
     private String username_utilisateur;
+    @FXML
+    private Button panier_btn;
+    @FXML
+    private Label nom_utilisateur;
 
     /**
      * Initializes the controller class.
@@ -61,14 +66,19 @@ public class VeloTnController implements Initializable {
         Parent root = null;
         try {
             root = FXMLLoader.load(getClass().getResource("/views/" + ui + ".fxml"));
-//            String c = recupererUtilisateurConnecte.getNom_Utilisateur();
-           // username_utilisateur.setText(c);
-            //System.out.println(c);
+             String n = recupererUtilisateurConnecte.getNom_Utilisateur();
+              nom_utilisateur.setText(n);
+           
         } catch (IOException ex) {
             Logger.getLogger(AccueilController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         borderpane.setCenter(root);
+    }
+
+    @FXML
+    private void PanierLoad(MouseEvent event) {
+          loadUI("Panier") ;
     }
     
 }

@@ -109,8 +109,9 @@ public class CategorieService implements IService<Categorie> {
 
         } catch (SQLException ex) {
             Logger.getLogger(CategorieService.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Categorie non Supprimer");
         }
-        System.out.println("Categorie non Supprimer");
+       
     }
 
     public void modifier(int id, String nom, String description) {
@@ -258,6 +259,29 @@ public class CategorieService implements IService<Categorie> {
         //in case there is no text and you wan to create an empty row
         //add the call to the table
         table.addCell(cell);
+
+    }
+
+
+    public int getIdCategorie(String c) {
+        
+        String sql = "select id from categorie where nom=" + "'" + c + "'";
+        
+        try {
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+
+            rs.next();
+            int id = rs.getInt(1);
+            //System.out.println("Id fil cat "+id);
+            return id;
+         //  System.out.println("Id fil cat "+id);
+          
+        } catch (SQLException ex) {
+            Logger.getLogger(CategorieService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+        
 
     }
 

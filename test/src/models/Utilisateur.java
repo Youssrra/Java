@@ -1,5 +1,7 @@
 package models;
 
+import javafx.scene.control.CheckBox;
+
 public class Utilisateur {
 
     private int id_Utilisateur;
@@ -9,6 +11,17 @@ public class Utilisateur {
     private String prenom_Utilisateur;
     private String motDePasse_Utilisateur;
     private String role_Utilisateur;
+    private int enabled ;
+
+    public int getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(int enabled) {
+        this.enabled = enabled;
+    }
+
+   
 
     public Utilisateur() {
     }
@@ -27,6 +40,8 @@ public class Utilisateur {
         this.nom_Utilisateur = nom_Utilisateur;
         this.role_Utilisateur = role_Utilisateur;
     }
+     
+     
 
     public Utilisateur(int id_Utilisateur, String username_Utilisateur, String email, String nom_Utilisateur, String motDePasse_Utilisateur, String role_Utilisateur) {
         this.id_Utilisateur = id_Utilisateur;
@@ -37,7 +52,7 @@ public class Utilisateur {
         this.role_Utilisateur = role_Utilisateur;
     }
 
-    public Utilisateur(int id_Utilisateur, String username_Utilisateur, String email, String nom_Utilisateur, String prenom_Utilisateur, String motDePasse_Utilisateur, String role_Utilisateur) {
+    public Utilisateur(int id_Utilisateur, String username_Utilisateur, String email, String nom_Utilisateur, String prenom_Utilisateur, String motDePasse_Utilisateur, String role_Utilisateur,int enabled) {
         this.id_Utilisateur = id_Utilisateur;
         this.username_Utilisateur = username_Utilisateur;
         this.email = email;
@@ -45,6 +60,9 @@ public class Utilisateur {
         this.prenom_Utilisateur = prenom_Utilisateur;
         this.motDePasse_Utilisateur = motDePasse_Utilisateur;
         this.role_Utilisateur = role_Utilisateur;
+        
+        //,int enabled
+        this.enabled = enabled;
     }
     
 
@@ -109,5 +127,7 @@ public class Utilisateur {
     public void setRole_Utilisateur(String role_Utilisateur) {
         this.role_Utilisateur = role_Utilisateur;
     }
+    
+    
 
 }
